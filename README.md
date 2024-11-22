@@ -1,4 +1,4 @@
-# SpyCamera
+# Camera Application
 
 This is a PET-project.
 
