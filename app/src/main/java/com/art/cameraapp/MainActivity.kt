@@ -1,12 +1,13 @@
 package com.art.cameraapp
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.art.cameraapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +37,21 @@ class MainActivity : AppCompatActivity() {
         buttonGallery.setOnClickListener {
             infoTextView.text = getString(R.string.todo_gallery_button)
         }
-
-
+        
+        if (allPermissionGranted()) {
+            Toast.makeText(this, "We have Permission", Toast.LENGTH_SHORT).show()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                Constants.REQUIRED_PERMISSIONS,
+                Constants.REQUEST_CODE_PERMISSIONS)
+        }
     }
+
+    private fun allPermissionGranted() =
+        Constants.REQUIRED_PERMISSIONS.all {
+            ContextCompat.checkSelfPermission(baseContext, it) ==
+                    PackageManager.PERMISSION_GRANTED
+        }
+
 }
