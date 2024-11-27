@@ -28,7 +28,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var infoTextView: TextView
     private var imageCapture : ImageCapture? = null
     private lateinit var outputDirectory : File
-    private lateinit var cameraExecutor: ExecutorService
+    private lateinit var cameraExecutor : ExecutorService
+    private lateinit var timePhoto : String
+    private lateinit var pathPhoto : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
+        timePhoto = SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
+            .format(System.currentTimeMillis())
         val photoFile = File (outputDirectory, SimpleDateFormat(Constants.FILE_NAME_FORMAT,
             Locale.getDefault())
             .format(System.currentTimeMillis()) + ".jpg")
@@ -87,8 +91,9 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
+                    pathPhoto = savedUri.toString()
                     val msg = "Photo Saved"
-                    infoTextView.text = "$msg $savedUri"
+                    infoTextView.text = "Date - $timePhoto \n $pathPhoto"
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_LONG)
                         .show()
                 }
